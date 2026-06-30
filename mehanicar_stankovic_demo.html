@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mehaničar Stanković – Zemunska 44, Beograd</title>
+<meta name="description" content="Auto servis Stanković, Zemun. Dijagnostika, mehanika, popravka svih marki vozila. Zemunska 44. Pozovite: 064 123 9988">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "Mehaničar Stanković",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Zemunska 44",
+    "addressLocality": "Beograd",
+    "addressCountry": "RS"
+  },
+  "telephone": "+381641239988"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+  :root {
+    --coal:       #18191F;
+    --coal-mid:   #1E2029;
+    --coal-light: #2A2D3A;
+    --yellow:     #F5C518;
+    --yellow-dim: rgba(245, 197, 24, 0.12);
+    --yellow-brd: rgba(245, 197, 24, 0.22);
+    --off-white:  #EDEDE8;
+    --muted:      rgba(237, 237, 232, 0.55);
+    --divider:    rgba(237, 237, 232, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--coal);
+    color: var(--off-white);
+    overflow-x: hidden;
+  }
+
+  /* ─── STICKY CALL BAR (mobile) ─── */
+  .sticky-call {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 999;
+    background: var(--yellow);
+    color: #18191F;
+    text-align: center;
+    padding: 15px 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  }
+  @media (max-width: 700px) { .sticky-call { display: block; } }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(24, 25, 31, 0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--divider);
+  }
+  .nav-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: var(--off-white);
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--yellow); }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .nav-location {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .nav-phone {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--yellow);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s;
+  }
+  .nav-phone:hover { opacity: 0.75; }
+  @media (max-width: 760px) {
+    nav { padding: 14px 20px; }
+    .nav-location { display: none; }
+    .nav-phone { display: none; }
+  }
+
+  /* ─── HERO — asimetričan layout ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    background: var(--coal);
+    overflow: hidden;
+    padding-top: 76px;
+  }
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      padding-top: 90px;
+      min-height: auto;
+    }
+  }
+
+  /* Suptilna mrežasta pozadina */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--divider) 1px, transparent 1px),
+      linear-gradient(90deg, var(--divider) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* Žuti sjaj odozdo levo */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,197,24,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HERO LEVA STRANA ─── */
+  .hero-left {
+    position: relative; z-index: 2;
+    padding: 60px 48px 60px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  @media (max-width: 860px) {
+    .hero-left { padding: 40px 24px 24px; }
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 28px;
+  }
+  .hero-tag-line {
+    width: 28px; height: 1px;
+    background: var(--yellow);
+    opacity: 0.6;
+  }
+
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--off-white);
+    margin-bottom: 24px;
+  }
+  .hero-title .hl { color: var(--yellow); }
+
+  .hero-sub {
+    font-size: clamp(15px, 1.8vw, 17px);
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 420px;
+    margin-bottom: 40px;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--yellow);
+    color: #18191F;
+    padding: 16px 40px;
+    border-radius: 3px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(245, 197, 24, 0.2);
+  }
+  .btn-primary:hover {
+    background: #e0b400;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(245, 197, 24, 0.3);
+  }
+
+  .hero-address {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── HERO DESNA STRANA — OBD dijagnoza displej ─── */
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 72px 60px 24px;
+  }
+  @media (max-width: 860px) {
+    .hero-right { padding: 0 24px 48px; }
+  }
+
+  /* OBD displej kontejner */
+  .obd-display {
+    width: 100%;
+    max-width: 400px;
+    background: #0D0E12;
+    border: 1px solid var(--yellow-brd);
+    border-radius: 12px;
+    padding: 28px 24px;
+    font-family: 'Oswald', sans-serif;
+    box-shadow: 0 0 60px rgba(245, 197, 24, 0.08), 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .obd-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(245,197,24,0.12);
+    margin-bottom: 20px;
+  }
+  .obd-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,197,24,0.5);
+  }
+  .obd-status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: blink 2.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
+  /* Redovi statusa sistema */
+  .obd-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .obd-row:last-child { border-bottom: none; }
+
+  .obd-label {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .obd-value {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .obd-value.ok    { color: #4CAF50; }
+  .obd-value.warn  { color: var(--yellow); }
+  .obd-value.fail  { color: #E53935; }
+
+  /* Animirani progress bar za temp motora */
+  .obd-bar-wrap {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(245,197,24,0.12);
+  }
+  .obd-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .obd-bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .obd-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4CAF50, var(--yellow));
+    border-radius: 2px;
+    transition: width 1.8s ease;
+  }
+
+  .obd-footer {
+    margin-top: 16px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245,197,24,0.35);
+    text-align: center;
+  }
+
+  /* ─── PRINCIP RADA — 3 koraka ─── */
+  .process-section {
+    background: var(--coal-mid);
+    padding: 90px 24px;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+  }
+  .process-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .process-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .process-headline {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 600;
+    text-align: center;
+    color: var(--off-white);
+    margin-bottom: 56px;
+    line-height: 1.1;
+  }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  @media (max-width: 700px) {
+    .process-grid { grid-template-columns: 1fr; gap: 2px; }
+  }
+  .process-step {
+    background: var(--coal);
+    padding: 40px 32px;
+    position: relative;
+  }
+  .process-step:first-child { border-radius: 8px 0 0 8px; }
+  .process-step:last-child  { border-radius: 0 8px 8px 0; }
+  @media (max-width: 700px) {
+    .process-step:first-child { border-radius: 8px 8px 0 0; }
+    .process-step:last-child  { border-radius: 0 0 8px 8px; }
+  }
+  .step-number {
+    font-family: 'Oswald', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    color: rgba(245,197,24,0.1);
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .step-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--off-white);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .step-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .step-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--yellow);
+    opacity: 0;
+    border-radius: 2px 0 0 2px;
+    transition: opacity 0.3s;
+  }
+  .process-step:hover .step-accent { opacity: 1; }
+
+  /* ─── USLUGE ─── */
+  .services-section {
+    background: var(--coal);
+    padding: 90px 24px;
+  }
+  .section-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .section-headline {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 600;
+    text-align: center;
+    color: var(--off-white);
+    margin-bottom: 52px;
+    line-height: 1.1;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  @media (max-width: 860px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .services-grid { grid-template-columns: 1fr; } }
+
+  .service-card {
+    background: var(--coal-mid);
+    border: 1px solid var(--divider);
+    border-radius: 6px;
+    padding: 28px 24px;
+    transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    cursor: default;
+  }
+  .service-card:hover {
+    border-color: var(--yellow-brd);
+    background: var(--coal-light);
+    transform: translateY(-3px);
+  }
+  .service-icon { margin-bottom: 16px; }
+  .service-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--off-white);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .service-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ─── CLOSING ─── */
+  .closing-section {
+    background: var(--coal-mid);
+    padding: 110px 24px;
+    text-align: center;
+    border-top: 1px solid var(--divider);
+    position: relative;
+    overflow: hidden;
+  }
+  .closing-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 700px 350px at 50% 50%, rgba(245,197,24,0.06), transparent);
+    pointer-events: none;
+  }
+  .closing-inner {
+    position: relative; z-index: 2;
+    max-width: 640px; margin: 0 auto;
+  }
+  .closing-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(34px, 5.5vw, 58px);
+    font-weight: 700;
+    color: var(--off-white);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .closing-title span { color: var(--yellow); }
+  .closing-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .closing-address {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .closing-address span { color: var(--yellow); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0D0E12;
+    padding: 26px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .footer-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(237,237,232,0.4);
+  }
+  .footer-logo span { color: var(--yellow); }
+  .footer-info {
+    font-size: 12px;
+    color: rgba(237,237,232,0.3);
+    text-align: right;
+    line-height: 1.7;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 580px) {
+    footer { flex-direction: column; gap: 14px; padding: 22px 20px; text-align: center; }
+    .footer-info { text-align: center; }
+  }
+
+  /* scroll indicator */
+  .scroll-ind {
+    position: absolute;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%);
+    animation: bob 2.4s ease-in-out infinite;
+    z-index: 3;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+    50%       { transform: translateX(-50%) translateY(8px); opacity: 1; }
+  }
+  @media (max-width: 860px) { .scroll-ind { display: none; } }
+</style>
+</head>
+<body>
+
+<a href="tel:+381641239988" class="sticky-call">Pozovite odmah: 064 123 9988</a>
+
+<nav>
+  <div class="nav-logo">Mehaničar <span>Stanković</span></div>
+  <div class="nav-right">
+    <span class="nav-location">Zemunska 44 · Zemun</span>
+    <a href="tel:+381641239988" class="nav-phone">064 123 9988</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- Levo: kopija -->
+  <div class="hero-left">
+    <div class="hero-tag">
+      <span class="hero-tag-line"></span>
+      Auto servis · Zemun · Beograd
+    </div>
+
+    <h1 class="hero-title">
+      Vaš auto,<br><span class="hl">vaša odluka.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Mi vam kažemo šta je problem i koliko košta popravka. Vi odobravate pre nego što počnemo.
+      Ništa se ne menja bez vašeg znanja.
+    </p>
+
+    <div class="hero-cta-group">
+      <a href="tel:+381641239988" class="btn-primary">Zakažite pregled</a>
+      <span class="hero-address">Zemunska 44 · Zemun</span>
+    </div>
+  </div>
+
+  <!-- Desno: OBD dijagnoza displej -->
+  <div class="hero-right">
+    <div class="obd-display">
+      <div class="obd-header">
+        <span class="obd-title">Dijagnostika vozila</span>
+        <span class="obd-status-dot"></span>
+      </div>
+
+      <div class="obd-row">
+        <span class="obd-label">Motor</span>
+        <span class="obd-value ok" id="val-motor">OK</span>
+      </div>
+      <div class="obd-row">
+        <span class="obd-label">Kočnice</span>
+        <span class="obd-value warn" id="val-kocnice">PROVERITI</span>
+      </div>
+      <div class="obd-row">
+        <span class="obd-label">Transmisija</span>
+        <span class="obd-value ok" id="val-trans">OK</span>
+      </div>
+      <div class="obd-row">
+        <span class="obd-label">Ulje</span>
+        <span class="obd-value warn" id="val-ulje">PROMENITI</span>
+      </div>
+      <div class="obd-row">
+        <span class="obd-label">ABS</span>
+        <span class="obd-value ok" id="val-abs">OK</span>
+      </div>
+      <div class="obd-row">
+        <span class="obd-label">Akumulator</span>
+        <span class="obd-value ok" id="val-aku">12.8 V</span>
+      </div>
+
+      <div class="obd-bar-wrap">
+        <div class="obd-bar-label">
+          <span>Temperatura motora</span>
+          <span id="temp-val">0°C</span>
+        </div>
+        <div class="obd-bar-track">
+          <div class="obd-bar-fill" id="temp-bar"></div>
+        </div>
+      </div>
+
+      <div class="obd-footer">· Predračun pre početka radova ·</div>
+    </div>
+  </div>
+
+  <div class="scroll-ind">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#F5C518" stroke-width="1.8" stroke-linecap="round">
+      <polyline points="5 8 11 14 17 8"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- PRINCIP RADA -->
+<section class="process-section">
+  <div class="process-inner">
+    <p class="process-eyebrow">Kako radimo</p>
+    <h2 class="process-headline">Znate cenu pre nego što<br>damo ključeve majstoru.</h2>
+    <div class="process-grid">
+
+      <div class="process-step">
+        <div class="step-accent"></div>
+        <div class="step-number">01</div>
+        <div class="step-title">Dovezete auto</div>
+        <p class="step-desc">Radimo dijagnostiku i pregled. Utvrđujemo šta je problem bez nagađanja i bez skrivenih troškova.</p>
+      </div>
+
+      <div class="process-step">
+        <div class="step-accent"></div>
+        <div class="step-number">02</div>
+        <div class="step-title">Dobijate predračun</div>
+        <p class="step-desc">Mi vam kažemo tačno šta treba da se uradi i koliko košta. Ništa ne počinjemo bez vašeg odobrenja.</p>
+      </div>
+
+      <div class="process-step">
+        <div class="step-accent"></div>
+        <div class="step-number">03</div>
+        <div class="step-title">Odvezete ispravan auto</div>
+        <p class="step-desc">Posao je gotov kad smo sigurni da je sve ispravno. Javićemo vam se čim bude gotovo.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- USLUGE -->
+<section class="services-section">
+  <p class="section-eyebrow">Šta radimo</p>
+  <h2 class="section-headline">Sve marke, svi modeli.</h2>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#F5C518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="15" cy="15" r="4"/>
+          <path d="M15 2v4M15 24v4M2 15h4M24 15h4"/>
+          <path d="M6.3 6.3l2.8 2.8M20.9 20.9l2.8 2.8M6.3 23.7l2.8-2.8M20.9 9.1l2.8-2.8"/>
+        </svg>
+      </div>
+      <div class="service-name">Kompjuterska dijagnostika</div>
+      <p class="service-desc">Čitanje grešaka, resetovanje lampica, analiza parametara motora. Znamo šta je problem pre nego što otvorimo haub.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#F5C518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 22 L4 18 Q4 10 15 10 Q26 10 26 18 L26 22"/>
+          <line x1="2" y1="22" x2="28" y2="22"/>
+          <circle cx="8" cy="24" r="3"/>
+          <circle cx="22" cy="24" r="3"/>
+        </svg>
+      </div>
+      <div class="service-name">Mehanika i popravke</div>
+      <p class="service-desc">Motor, menjač, amortizeri, kvačilo. Popravka kvarova svih vrsta na putničkim vozilima i kombi programu.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#F5C518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12 Q5 6 15 6 Q25 6 25 12 L25 20 Q25 24 15 24 Q5 24 5 20 Z"/>
+          <line x1="10" y1="15" x2="20" y2="15"/>
+          <line x1="15" y1="10" x2="15" y2="20"/>
+        </svg>
+      </div>
+      <div class="service-name">Servis kočnica</div>
+      <p class="service-desc">Zamena diskova, pločica i bubnjeva. Proveravamo celokupan kočioni sistem i punjenje ABS sistema.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#F5C518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 10 L8 22 M22 10 L22 22"/>
+          <path d="M8 10 Q15 6 22 10"/>
+          <path d="M8 22 Q15 26 22 22"/>
+          <line x1="8" y1="16" x2="22" y2="16"/>
+        </svg>
+      </div>
+      <div class="service-name">Zamena ulja i filtera</div>
+      <p class="service-desc">Mali i veliki servis po preporuci proizvođača. Koristimo ulja odgovarajuće specifikacije za vaše vozilo.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#F5C518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 14 Q6 8 15 8 Q24 8 24 14"/>
+          <path d="M4 18 Q4 24 15 24 Q26 24 26 18"/>
+          <line x1="6" y1="14" x2="4" y2="18"/>
+          <line x1="24" y1="14" x2="26" y2="18"/>
+          <line x1="15" y1="8" x2="15" y2="4"/>
+        </svg>
+      </div>
+      <div class="service-name">Servis klime</div>
+      <p class="service-desc">Punjenje rashladnog gasa, provera kompresora i sistema. Urađeno pre letnje sezone, ne u sredini avgusta.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#F5C518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="15" cy="15" r="9"/>
+          <path d="M15 9 L15 15 L19 19"/>
+        </svg>
+      </div>
+      <div class="service-name">Redovan servis</div>
+      <p class="service-desc">Periodični pregledi po kilometražnom planu. Čuvamo istoriju vašeg vozila i podsećamo vas kad je vreme za sledeći servis.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing-section">
+  <div class="closing-inner">
+    <h2 class="closing-title">Zakažite.<br>Dolazite sa problemom,<br><span>odlazite sa rešenjem.</span></h2>
+    <p class="closing-sub">Predračun je besplatan. Nema skrivenih troškova, nema iznenađenja na kraju.</p>
+    <p class="closing-address">Zemunska <span>44</span> · Zemun, Beograd</p>
+    <a href="tel:+381641239988" class="btn-primary">064 123 9988</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Mehaničar <span>Stanković</span></div>
+  <div class="footer-info">
+    ZEMUNSKA 44 · ZEMUN, BEOGRAD<br>
+    064 123 9988
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Početno sakrivanje
+gsap.set([".hero-tag", ".hero-title", ".hero-sub", ".hero-cta-group"], {
+  opacity: 0, x: -30
+});
+gsap.set(".obd-display", {
+  opacity: 0, y: 24, scale: 0.97
+});
+gsap.set(".scroll-ind", { opacity: 0 });
+
+// Hero entrance
+const tl = gsap.timeline({ delay: 0.2 });
+tl
+  .to(".hero-tag",       { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" })
+  .to(".hero-title",     { opacity: 1, x: 0, duration: 0.9, ease: "power3.out" }, "-=0.2")
+  .to(".hero-sub",       { opacity: 1, x: 0, duration: 0.7, ease: "power2.out" }, "-=0.5")
+  .to(".hero-cta-group", { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" }, "-=0.4")
+  .to(".obd-display",    { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" }, "-=0.5")
+  .to(".scroll-ind",     { opacity: 1, duration: 0.4 }, "-=0.2");
+
+// OBD temp bar animacija
+setTimeout(() => {
+  const bar = document.getElementById('temp-bar');
+  const val = document.getElementById('temp-val');
+  if (bar) bar.style.width = '68%';
+  // Broji od 0 do 89°C
+  let current = 0;
+  const target = 89;
+  const interval = setInterval(() => {
+    current += 2;
+    if (current >= target) {
+      current = target;
+      clearInterval(interval);
+    }
+    if (val) val.textContent = current + '°C';
+  }, 40);
+}, 900);
+
+// OBD vrednosti — pojavljuju se sa malim kašnjenjem
+const rows = document.querySelectorAll('.obd-row');
+rows.forEach((row, i) => {
+  gsap.from(row, {
+    opacity: 0, x: 10,
+    duration: 0.4,
+    delay: 0.6 + i * 0.08,
+    ease: "power1.out"
+  });
+});
+
+// Parallax na hero shape-ovima
+const hero = document.querySelector('.hero');
+if (hero) {
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top)  / rect.height - 0.5;
+    gsap.to(".obd-display", { duration: 1.8, x: xPct * 12, y: yPct * 8, ease: "power1.out" });
+    gsap.to(".hero-left",   { duration: 1.5, x: xPct * -6, y: yPct * -3, ease: "power1.out" });
+  });
+}
+
+// Process steps
+gsap.set(".process-step", { opacity: 0, y: 30 });
+gsap.to(".process-step", {
+  scrollTrigger: { trigger: ".process-section", start: "top 70%" },
+  opacity: 1, y: 0,
+  duration: 0.7, stagger: 0.14,
+  ease: "power2.out"
+});
+
+// Process headline
+gsap.from(".process-headline, .process-eyebrow", {
+  scrollTrigger: { trigger: ".process-section", start: "top 75%" },
+  opacity: 0, y: 24,
+  duration: 0.7, stagger: 0.12,
+  ease: "power2.out"
+});
+
+// Service cards
+gsap.set(".service-card", {
+  opacity: 0, y: 40, rotateX: 14,
+  transformPerspective: 900, transformOrigin: "top center"
+});
+gsap.to(".service-card", {
+  scrollTrigger: { trigger: ".services-grid", start: "top 72%", toggleActions: "play none none reverse" },
+  opacity: 1, y: 0, rotateX: 0,
+  duration: 0.65, stagger: 0.08,
+  ease: "power2.out"
+});
+
+// Section headlines
+gsap.from(".section-eyebrow, .section-headline", {
+  scrollTrigger: { trigger: ".services-section", start: "top 75%" },
+  opacity: 0, y: 24,
+  duration: 0.7, stagger: 0.1,
+  ease: "power2.out"
+});
+
+// Closing
+gsap.from(".closing-inner", {
+  scrollTrigger: { trigger: ".closing-section", start: "top 72%" },
+  opacity: 0, y: 36,
+  duration: 1.0, ease: "power3.out"
+});
+</script>
+</body>
+</html>

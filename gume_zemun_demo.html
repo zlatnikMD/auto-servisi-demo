@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gume Zemun – Zemunska cesta 18, Beograd</title>
+<meta name="description" content="Vulkanizer i prodaja guma, Zemun. Montaža, balansiranje, sezonska zamena, nove i polovne gume. Zemunska cesta 18. Pozovite: 011 316 4422">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "Gume Zemun",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Zemunska cesta 18",
+    "addressLocality": "Beograd",
+    "addressCountry": "RS"
+  },
+  "telephone": "+381113164422"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+  :root {
+    --navy:       #1A2340;
+    --navy-mid:   #202A4A;
+    --navy-light: #263057;
+    --gold:       #C9A84C;
+    --gold-dim:   rgba(201, 168, 76, 0.10);
+    --gold-brd:   rgba(201, 168, 76, 0.20);
+    --gold-line:  rgba(201, 168, 76, 0.45);
+    --off-white:  #EEE8DC;
+    --muted:      rgba(238, 232, 220, 0.52);
+    --divider:    rgba(238, 232, 220, 0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--navy);
+    color: var(--off-white);
+    overflow-x: hidden;
+  }
+
+  /* ─── STICKY CALL BAR ─── */
+  .sticky-call {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 999;
+    background: var(--gold);
+    color: var(--navy);
+    text-align: center;
+    padding: 15px 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+  }
+  @media (max-width: 700px) { .sticky-call { display: block; } }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 17px 48px;
+    background: rgba(26, 35, 64, 0.95);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--divider);
+  }
+  .nav-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav-location {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .nav-phone {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s;
+  }
+  .nav-phone:hover { opacity: 0.75; }
+  @media (max-width: 760px) {
+    nav { padding: 13px 20px; }
+    .nav-location { display: none; }
+    .nav-phone { display: none; }
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--navy);
+    overflow: hidden;
+    padding: 100px 24px 80px;
+  }
+
+  /* Suptilna dijagonalna tekstura */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      135deg,
+      rgba(201,168,76,0.025) 0px,
+      rgba(201,168,76,0.025) 1px,
+      transparent 1px,
+      transparent 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Zlatni sjaj gore desno */
+  .hero-glow {
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Pozadinska guma — suptilna, desno */
+  .bg-tire {
+    position: absolute;
+    right: -80px; top: 50%;
+    transform: translateY(-50%);
+    width: 520px; height: 520px;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  /* Zlatna linija — signature element */
+  .gold-rule {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0;
+  }
+
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(46px, 7.5vw, 86px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    color: var(--off-white);
+    margin-bottom: 0;
+    opacity: 0;
+  }
+  .hero-title .gold { color: var(--gold); }
+
+  /* Horizontalna zlatna linija između naslova i podnaziva — signature */
+  .hero-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-line) 0%, transparent 70%);
+    margin: 28px 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 1.9vw, 18px);
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 520px;
+    margin-bottom: 44px;
+    opacity: 0;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    opacity: 0;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    padding: 16px 42px;
+    border-radius: 3px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.22);
+  }
+  .btn-primary:hover {
+    background: #b8952e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(201,168,76,0.32);
+  }
+
+  .hero-phone-text {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--off-white);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .hero-phone-text:hover { color: var(--gold); }
+
+  .scroll-ind {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    animation: bob 2.4s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.35; }
+    50%       { transform: translateX(-50%) translateY(7px); opacity: 0.8; }
+  }
+
+  /* ─── PRODAJA GUMA — istaknuta sekcija ─── */
+  .gume-section {
+    background: var(--navy-mid);
+    padding: 80px 24px;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+  }
+  .gume-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .section-headline {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 600;
+    color: var(--off-white);
+    text-align: center;
+    margin-bottom: 48px;
+    line-height: 1.1;
+  }
+
+  .gume-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 760px) { .gume-grid { grid-template-columns: 1fr; gap: 12px; } }
+
+  .gume-card {
+    background: var(--navy);
+    border: 1px solid var(--divider);
+    border-radius: 6px;
+    padding: 32px 26px;
+    transition: border-color 0.25s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .gume-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .gume-card:hover {
+    border-color: var(--gold-brd);
+    transform: translateY(-3px);
+  }
+  .gume-card:hover::before { opacity: 1; }
+
+  .gume-card-icon { margin-bottom: 18px; }
+  .gume-card-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--off-white);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .gume-card-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ─── USLUGE ─── */
+  .services-section {
+    background: var(--navy);
+    padding: 80px 24px;
+  }
+  .services-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .services-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-top: 48px;
+  }
+  @media (max-width: 640px) { .services-list { grid-template-columns: 1fr; } }
+
+  .svc-row {
+    background: var(--navy-mid);
+    padding: 24px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: background 0.2s;
+  }
+  .svc-row:hover { background: var(--navy-light); }
+  .svc-row:first-child { border-radius: 6px 0 0 0; }
+  .svc-row:nth-child(2) { border-radius: 0 6px 0 0; }
+  .svc-row:nth-last-child(2) { border-radius: 0 0 0 6px; }
+  .svc-row:last-child { border-radius: 0 0 6px 0; }
+  @media (max-width: 640px) {
+    .svc-row:first-child { border-radius: 6px 6px 0 0; }
+    .svc-row:nth-child(2) { border-radius: 0; }
+    .svc-row:nth-last-child(2) { border-radius: 0; }
+    .svc-row:last-child { border-radius: 0 0 6px 6px; }
+  }
+
+  .svc-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 7px;
+    opacity: 0.7;
+  }
+  .svc-content {}
+  .svc-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--off-white);
+    margin-bottom: 5px;
+    letter-spacing: 0.02em;
+  }
+  .svc-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ─── LOKACIJA / O NAMA ─── */
+  .about-section {
+    background: var(--navy-mid);
+    padding: 80px 24px;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+  }
+  .about-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 680px) {
+    .about-inner { grid-template-columns: 1fr; gap: 36px; }
+  }
+  .about-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .about-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(26px, 3.5vw, 38px);
+    font-weight: 600;
+    color: var(--off-white);
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+  .about-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  /* Adresa blok */
+  .address-block {
+    background: var(--navy);
+    border: 1px solid var(--gold-brd);
+    border-radius: 6px;
+    padding: 28px 24px;
+  }
+  .addr-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--divider);
+  }
+  .addr-row:last-child { border-bottom: none; }
+  .addr-icon {
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .addr-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .addr-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--off-white);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  a.addr-value:hover { color: var(--gold); }
+
+  /* ─── CLOSING ─── */
+  .closing-section {
+    background: var(--navy);
+    padding: 110px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .closing-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 700px 300px at 50% 50%, rgba(201,168,76,0.07), transparent);
+    pointer-events: none;
+  }
+  .closing-inner {
+    position: relative; z-index: 2;
+    max-width: 640px; margin: 0 auto;
+  }
+
+  /* Zlatna linija iznad closing naslova */
+  .closing-rule {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin: 0 auto 28px;
+    opacity: 0.6;
+  }
+
+  .closing-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(34px, 5.5vw, 58px);
+    font-weight: 700;
+    color: var(--off-white);
+    line-height: 1.08;
+    margin-bottom: 18px;
+  }
+  .closing-title span { color: var(--gold); }
+  .closing-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .closing-address {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .closing-address span { color: var(--gold); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0F1520;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(201,168,76,0.08);
+  }
+  .footer-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(238,232,220,0.35);
+  }
+  .footer-logo span { color: rgba(201,168,76,0.6); }
+  .footer-info {
+    font-size: 12px;
+    color: rgba(238,232,220,0.28);
+    text-align: right;
+    line-height: 1.7;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 580px) {
+    footer { flex-direction: column; gap: 12px; padding: 20px; text-align: center; }
+    .footer-info { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<a href="tel:+381113164422" class="sticky-call">Pozovite: 011 316 4422</a>
+
+<nav>
+  <div class="nav-logo">Gume <span>Zemun</span></div>
+  <div class="nav-right">
+    <span class="nav-location">Zemunska cesta 18</span>
+    <a href="tel:+381113164422" class="nav-phone">011 316 4422</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <!-- Pozadinska guma -->
+  <div class="bg-tire">
+    <svg viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="260" cy="260" r="240" stroke="white" stroke-width="50"/>
+      <circle cx="260" cy="260" r="135" stroke="white" stroke-width="6"/>
+      <circle cx="260" cy="260" r="44"  stroke="white" stroke-width="6"/>
+      <circle cx="260" cy="162" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="260" cy="358" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="162" cy="260" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="358" cy="260" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="192" cy="192" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="328" cy="328" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="328" cy="192" r="14"  stroke="white" stroke-width="5"/>
+      <circle cx="192" cy="328" r="14"  stroke="white" stroke-width="5"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="gold-rule"></div>
+    <p class="hero-eyebrow">Vulkanizer i prodaja guma · Zemun · Beograd</p>
+    <h1 class="hero-title">
+      Gume za svako<br>vozilo. <span class="gold">Na pravom mestu.</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">
+      Nove i polovne gume, montaža, balansiranje, sezonska zamena.
+      Nalazimo se već godinama na istoj adresi. Dođite u Zemunsku 18.
+    </p>
+    <div class="hero-cta-row">
+      <a href="tel:+381113164422" class="btn-primary">Pozovite nas</a>
+      <a href="tel:+381113164422" class="hero-phone-text">011 316 4422</a>
+    </div>
+  </div>
+
+  <div class="scroll-ind">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="1.8" stroke-linecap="round">
+      <polyline points="4 7 10 13 16 7"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- PRODAJA GUMA -->
+<section class="gume-section">
+  <div class="gume-inner">
+    <p class="section-eyebrow">Prodaja guma</p>
+    <h2 class="section-headline">Nove i polovne gume.<br>Sve dimenzije, sve marke.</h2>
+
+    <div class="gume-grid">
+
+      <div class="gume-card">
+        <div class="gume-card-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#C9A84C" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="16" cy="16" r="12"/>
+            <circle cx="16" cy="16" r="4"/>
+            <path d="M16 4 L16 8 M16 24 L16 28 M4 16 L8 16 M24 16 L28 16"/>
+          </svg>
+        </div>
+        <div class="gume-card-title">Nove gume</div>
+        <p class="gume-card-desc">Michelin, Pirelli, Continental, Goodyear, Sava, Tigar. Letnje i zimske, sve dimenzije za putnička i kombi vozila.</p>
+      </div>
+
+      <div class="gume-card">
+        <div class="gume-card-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#C9A84C" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="16" cy="16" r="12"/>
+            <circle cx="16" cy="16" r="4"/>
+            <path d="M10 10 L13 13 M19 19 L22 22 M10 22 L13 19 M19 13 L22 10"/>
+          </svg>
+        </div>
+        <div class="gume-card-title">Polovne gume</div>
+        <p class="gume-card-desc">Proverene polovne gume u dobrom stanju. Pregledamo svaku pre prodaje. Ne prodajemo gume koje ne bismo stavili na sopstveno vozilo.</p>
+      </div>
+
+      <div class="gume-card">
+        <div class="gume-card-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#C9A84C" stroke-width="1.7" stroke-linecap="round">
+            <rect x="6" y="10" width="20" height="12" rx="2"/>
+            <path d="M6 16 L2 16 M26 16 L30 16"/>
+            <circle cx="11" cy="16" r="2" fill="#C9A84C" stroke="none"/>
+            <circle cx="21" cy="16" r="2" fill="#C9A84C" stroke="none"/>
+          </svg>
+        </div>
+        <div class="gume-card-title">Hotel za gume</div>
+        <p class="gume-card-desc">Čuvamo vam vansezonske gume. Skladištimo ih u odgovarajućim uslovima, sortirane i obeležene po broju i poziciji.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- USLUGE -->
+<section class="services-section">
+  <div class="services-inner">
+    <p class="section-eyebrow">Vulkanizerske usluge</p>
+    <h2 class="section-headline">Sve što vašim gumama treba.</h2>
+
+    <div class="services-list">
+
+      <div class="svc-row">
+        <div class="svc-dot"></div>
+        <div class="svc-content">
+          <div class="svc-name">Montaža i demontaža</div>
+          <p class="svc-desc">Skidanje i postavljanje guma na felne. Sve dimenzije putničkog i kombi programa.</p>
+        </div>
+      </div>
+
+      <div class="svc-row">
+        <div class="svc-dot"></div>
+        <div class="svc-content">
+          <div class="svc-name">Balansiranje točkova</div>
+          <p class="svc-desc">Pravilno balansirani točkovi smanjuju habanje guma i vibracije tokom vožnje.</p>
+        </div>
+      </div>
+
+      <div class="svc-row">
+        <div class="svc-dot"></div>
+        <div class="svc-content">
+          <div class="svc-name">Sezonska zamena</div>
+          <p class="svc-desc">Zimske zamenjujemo letnjim i obrnuto. Zakažite unapred i dođite kad vam odgovara.</p>
+        </div>
+      </div>
+
+      <div class="svc-row">
+        <div class="svc-dot"></div>
+        <div class="svc-content">
+          <div class="svc-name">Krpljenje gume</div>
+          <p class="svc-desc">Proveravamo da li se guma može zakrpiti. Ako može, uradi se na licu mesta.</p>
+        </div>
+      </div>
+
+      <div class="svc-row">
+        <div class="svc-dot"></div>
+        <div class="svc-content">
+          <div class="svc-name">Ispravljanje felni</div>
+          <p class="svc-desc">Deformisane alu i čelične felne nastale od udarnih jama ili ivičnjaka.</p>
+        </div>
+      </div>
+
+      <div class="svc-row">
+        <div class="svc-dot"></div>
+        <div class="svc-content">
+          <div class="svc-name">Provera pritiska</div>
+          <p class="svc-desc">Provera i podešavanje pritiska u gumama, uključujući rezervni točak.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- O NAMA / LOKACIJA -->
+<section class="about-section">
+  <div class="about-inner">
+    <div class="about-text">
+      <p class="about-eyebrow">Zemun · Beograd</p>
+      <h2 class="about-title">Znate gde smo.<br>Uvek smo tu.</h2>
+      <p class="about-desc">
+        Nalazimo se već godinama na istoj adresi. Mušterije se vraćaju jer znaju da će dobiti
+        poštenu procenu i korektnu uslugu. Nema skrivenih stavki na kraju.
+      </p>
+      <a href="tel:+381113164422" class="btn-primary">Pozovite: 011 316 4422</a>
+    </div>
+
+    <div class="address-block">
+      <div class="addr-row">
+        <div class="addr-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M8 1C5.24 1 3 3.24 3 6c0 4 5 9 5 9s5-5 5-9c0-2.76-2.24-5-5-5z"/>
+            <circle cx="8" cy="6" r="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="addr-label">Adresa</div>
+          <div class="addr-value">Zemunska cesta 18, Zemun</div>
+        </div>
+      </div>
+      <div class="addr-row">
+        <div class="addr-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M14 10.67v2a1.33 1.33 0 01-1.45 1.33 13.2 13.2 0 01-5.75-2.05 13 13 0 01-4-4 13.2 13.2 0 01-2.05-5.78A1.33 1.33 0 012.08 1h2a1.33 1.33 0 011.33 1.15c.085.64.24 1.27.47 1.87a1.33 1.33 0 01-.3 1.41L4.72 6.27a10.67 10.67 0 004 4l.84-.85a1.33 1.33 0 011.41-.3c.6.23 1.23.385 1.87.47A1.33 1.33 0 0114 10.67z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="addr-label">Telefon</div>
+          <a href="tel:+381113164422" class="addr-value">011 316 4422</a>
+        </div>
+      </div>
+      <div class="addr-row">
+        <div class="addr-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="8" cy="8" r="6"/>
+            <path d="M8 4v4l2.5 2.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="addr-label">Radno vreme</div>
+          <div class="addr-value">Pon–Pet 08:00–17:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing-section">
+  <div class="closing-inner">
+    <div class="closing-rule"></div>
+    <h2 class="closing-title">Trebaju vam gume?<br><span>Dođite u Zemun.</span></h2>
+    <p class="closing-sub">Nove ili polovne, montaža ili zamena. Pozovite i dogovorite se.</p>
+    <p class="closing-address">Zemunska cesta <span>18</span> · Zemun, Beograd</p>
+    <a href="tel:+381113164422" class="btn-primary">011 316 4422</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Gume <span>Zemun</span></div>
+  <div class="footer-info">
+    ZEMUNSKA CESTA 18 · ZEMUN, BEOGRAD<br>
+    011 316 4422
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Početno stanje
+gsap.set([".hero-eyebrow", ".hero-title", ".hero-sub", ".hero-cta-row", ".scroll-ind"], {
+  opacity: 0, y: 22
+});
+gsap.set(".gold-rule", { opacity: 0, scaleX: 0, transformOrigin: "left" });
+gsap.set(".hero-divider", { opacity: 0, scaleX: 0 });
+
+// Hero entrance
+const tl = gsap.timeline({ delay: 0.15 });
+tl
+  .to(".gold-rule",    { opacity: 1, scaleX: 1, duration: 0.6, ease: "power2.out" })
+  .to(".hero-eyebrow", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2")
+  .to(".hero-title",   { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, "-=0.3")
+  .to(".hero-divider", { opacity: 1, scaleX: 1, duration: 0.8, ease: "power2.inOut" }, "-=0.4")
+  .to(".hero-sub",     { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.4")
+  .to(".hero-cta-row", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.4")
+  .to(".scroll-ind",   { opacity: 1, y: 0, duration: 0.4 }, "-=0.2");
+
+// Parallax gume u pozadini
+const hero = document.querySelector('.hero');
+if (hero) {
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top)  / rect.height - 0.5;
+    gsap.to(".bg-tire",    { duration: 2.5, x: xPct * 30, y: yPct * 15, ease: "power1.out" });
+    gsap.to(".hero-inner", { duration: 1.5, x: xPct * -8, y: yPct * -4, ease: "power1.out" });
+  });
+}
+
+// Lagana rotacija gume
+gsap.to(".bg-tire", {
+  rotation: 360, duration: 80,
+  ease: "none", repeat: -1,
+  transformOrigin: "center center"
+});
+
+// Gume kartice
+gsap.set(".gume-card", {
+  opacity: 0, y: 40, rotateX: 14,
+  transformPerspective: 900, transformOrigin: "top center"
+});
+gsap.to(".gume-card", {
+  scrollTrigger: { trigger: ".gume-grid", start: "top 72%", toggleActions: "play none none reverse" },
+  opacity: 1, y: 0, rotateX: 0,
+  duration: 0.7, stagger: 0.12, ease: "power2.out"
+});
+
+// Section headlines
+gsap.from(".section-eyebrow, .section-headline", {
+  scrollTrigger: { trigger: ".gume-section", start: "top 75%" },
+  opacity: 0, y: 22, duration: 0.65, stagger: 0.1, ease: "power2.out"
+});
+
+// Usluge redovi
+gsap.from(".svc-row", {
+  scrollTrigger: { trigger: ".services-list", start: "top 75%" },
+  opacity: 0, x: -20, duration: 0.5, stagger: 0.07, ease: "power2.out"
+});
+
+gsap.from(".section-eyebrow, .section-headline", {
+  scrollTrigger: { trigger: ".services-section", start: "top 75%" },
+  opacity: 0, y: 22, duration: 0.65, stagger: 0.1, ease: "power2.out"
+});
+
+// About sekcija
+gsap.from(".about-text", {
+  scrollTrigger: { trigger: ".about-section", start: "top 72%" },
+  opacity: 0, x: -28, duration: 0.8, ease: "power2.out"
+});
+gsap.from(".address-block", {
+  scrollTrigger: { trigger: ".about-section", start: "top 72%" },
+  opacity: 0, x: 28, duration: 0.8, ease: "power2.out"
+});
+
+// Closing
+gsap.from(".closing-inner", {
+  scrollTrigger: { trigger: ".closing-section", start: "top 72%" },
+  opacity: 0, y: 32, duration: 0.9, ease: "power3.out"
+});
+</script>
+</body>
+</html>

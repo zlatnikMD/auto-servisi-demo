@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vulkanizer Čukarica – Pešačka 3, Beograd</title>
+<meta name="description" content="Vulkanizer Čukarica, Pešačka 3. Zamena i montaža guma, krpljenje, balansiranje. Pozovite: 011 353 2211">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "Vulkanizer Čukarica",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Pešačka 3",
+    "addressLocality": "Beograd",
+    "addressCountry": "RS"
+  },
+  "telephone": "+381113532211"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+  :root {
+    --black:      #0F0F0F;
+    --black-mid:  #161616;
+    --black-soft: #1E1E1E;
+    --red:        #E63C1E;
+    --red-dim:    rgba(230, 60, 30, 0.12);
+    --red-brd:    rgba(230, 60, 30, 0.22);
+    --off-white:  #F0EDE8;
+    --muted:      rgba(240, 237, 232, 0.52);
+    --divider:    rgba(240, 237, 232, 0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--black);
+    color: var(--off-white);
+    overflow-x: hidden;
+  }
+
+  /* ─── STICKY CALL BAR ─── */
+  .sticky-call {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 999;
+    background: var(--red);
+    color: #fff;
+    text-align: center;
+    padding: 16px 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    box-shadow: 0 -4px 24px rgba(230,60,30,0.4);
+  }
+  @media (max-width: 700px) { .sticky-call { display: block; } }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(15,15,15,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--divider);
+  }
+  .nav-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-phone {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--red);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s;
+  }
+  .nav-phone:hover { opacity: 0.75; }
+  @media (max-width: 700px) {
+    nav { padding: 13px 20px; }
+    .nav-phone { display: none; }
+  }
+
+  /* ─── HERO — vertikalni, telefon u centru ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    overflow: hidden;
+    padding: 100px 24px 80px;
+    text-align: center;
+  }
+
+  /* Guma u pozadini — veliki SVG krug */
+  .bg-tire {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(700px, 130vw);
+    height: min(700px, 130vw);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.04;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(44px, 9vw, 88px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--off-white);
+    margin-bottom: 10px;
+  }
+  .hero-title .red { color: var(--red); }
+
+  .hero-sub {
+    font-size: clamp(15px, 2vw, 17px);
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 460px;
+    margin-bottom: 52px;
+  }
+
+  /* Telefon sa ping efektom — signature element */
+  .phone-block {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 36px;
+  }
+
+  /* Pulsirajući ping prstenovi */
+  .ping-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--red);
+    animation: ping 2.4s ease-out infinite;
+    pointer-events: none;
+  }
+  .ping-ring:nth-child(2) { animation-delay: 0.8s; }
+  .ping-ring:nth-child(3) { animation-delay: 1.6s; }
+
+  @keyframes ping {
+    0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+  }
+
+  .phone-btn {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--red);
+    color: #fff;
+    padding: 20px 48px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 6px 32px rgba(230,60,30,0.35);
+    white-space: nowrap;
+  }
+  .phone-btn:hover {
+    background: #cc3318;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(230,60,30,0.45);
+  }
+  .phone-icon {
+    width: 24px; height: 24px;
+    flex-shrink: 0;
+  }
+
+  .hero-address {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Scroll indicator */
+  .scroll-ind {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    animation: bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.35; }
+    50%       { transform: translateX(-50%) translateY(7px); opacity: 0.9; }
+  }
+
+  /* ─── USLUGE — horizontalna lista ─── */
+  .services-strip {
+    background: var(--black-mid);
+    padding: 72px 24px;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+  }
+  .strip-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .strip-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .strip-headline {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 600;
+    color: var(--off-white);
+    text-align: center;
+    margin-bottom: 48px;
+    line-height: 1.1;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 860px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .services-grid { grid-template-columns: 1fr; } }
+
+  .svc-card {
+    background: var(--black);
+    border: 1px solid var(--divider);
+    border-radius: 6px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  }
+  .svc-card:hover {
+    border-color: var(--red-brd);
+    background: var(--black-soft);
+    transform: translateY(-3px);
+  }
+  .svc-icon { margin-bottom: 14px; }
+  .svc-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--off-white);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .svc-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ─── SEZONSKA ZAMENA ─── */
+  .seasonal-section {
+    background: var(--black);
+    padding: 80px 24px;
+  }
+  .seasonal-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  @media (max-width: 680px) {
+    .seasonal-inner { grid-template-columns: 1fr; gap: 28px; }
+  }
+  .seasonal-text {}
+  .seasonal-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+  .seasonal-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 600;
+    color: var(--off-white);
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+  .seasonal-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+  .btn-secondary {
+    display: inline-block;
+    border: 1px solid var(--red-brd);
+    color: var(--red);
+    padding: 13px 32px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: var(--red-dim);
+    border-color: var(--red);
+  }
+
+  /* Guma SVG ilustracija */
+  .seasonal-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Kalendar kutije */
+  .season-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .season-box {
+    background: var(--black-mid);
+    border: 1px solid var(--divider);
+    border-radius: 6px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .season-box.active {
+    border-color: var(--red-brd);
+    background: var(--red-dim);
+  }
+  .season-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .season-box.active .season-name { color: var(--red); }
+  .season-period {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--off-white);
+  }
+  .season-rec {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+  .season-box.active .season-rec { color: rgba(230,60,30,0.7); }
+
+  /* ─── CLOSING ─── */
+  .closing-section {
+    background: var(--red);
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .closing-section::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.12);
+    pointer-events: none;
+  }
+  .closing-section::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.08);
+    pointer-events: none;
+  }
+  .closing-inner {
+    position: relative; z-index: 2;
+    max-width: 620px; margin: 0 auto;
+  }
+  .closing-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 20px;
+  }
+  .closing-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .closing-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .closing-address {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 40px;
+  }
+  .btn-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    color: var(--red);
+    padding: 18px 44px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 6px 28px rgba(0,0,0,0.2);
+  }
+  .btn-white:hover {
+    background: #f5f0ea;
+    transform: translateY(-2px);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0A0A0A;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .footer-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(240,237,232,0.35);
+  }
+  .footer-logo span { color: var(--red); opacity: 0.8; }
+  .footer-info {
+    font-size: 12px;
+    color: rgba(240,237,232,0.28);
+    text-align: right;
+    line-height: 1.7;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 580px) {
+    footer { flex-direction: column; gap: 12px; padding: 20px; text-align: center; }
+    .footer-info { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<a href="tel:+381113532211" class="sticky-call">Pozovite odmah: 011 353 2211</a>
+
+<nav>
+  <div class="nav-logo">Vulkanizer <span>Čukarica</span></div>
+  <a href="tel:+381113532211" class="nav-phone">011 353 2211</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- Guma u pozadini -->
+  <div class="bg-tire">
+    <svg viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Spoljna guma -->
+      <circle cx="350" cy="350" r="320" stroke="white" stroke-width="60"/>
+      <!-- Felna -->
+      <circle cx="350" cy="350" r="180" stroke="white" stroke-width="8"/>
+      <circle cx="350" cy="350" r="60"  stroke="white" stroke-width="8"/>
+      <!-- Šrafovi felne -->
+      <circle cx="350" cy="220" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="350" cy="480" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="220" cy="350" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="480" cy="350" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="247" cy="247" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="453" cy="453" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="453" cy="247" r="18"  stroke="white" stroke-width="6"/>
+      <circle cx="247" cy="453" r="18"  stroke="white" stroke-width="6"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Vulkanizer · Čukarica · Pešačka 3</p>
+
+    <h1 class="hero-title">
+      Probušila vam se guma?<br><span class="red">Zovite odmah.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Montaža, demontaža, balansiranje, krpljenje. Zakažite termin ili dođite odmah.
+    </p>
+
+    <div class="phone-block">
+      <div class="ping-ring"></div>
+      <div class="ping-ring"></div>
+      <div class="ping-ring"></div>
+      <a href="tel:+381113532211" class="phone-btn">
+        <svg class="phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.03 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        011 353 2211
+      </a>
+    </div>
+
+    <p class="hero-address">Pešačka 3 · Čukarica · Beograd</p>
+  </div>
+
+  <div class="scroll-ind">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="rgba(240,237,232,0.4)" stroke-width="1.8" stroke-linecap="round">
+      <polyline points="4 7 10 13 16 7"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- USLUGE -->
+<section class="services-strip">
+  <div class="strip-inner">
+    <p class="strip-eyebrow">Šta radimo</p>
+    <h2 class="strip-headline">Sve vulkanizerske usluge<br>na jednom mestu.</h2>
+
+    <div class="services-grid">
+
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="#E63C1E" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="17" cy="17" r="13"/>
+            <circle cx="17" cy="17" r="5"/>
+            <circle cx="17" cy="7"  r="2.2" fill="#E63C1E" stroke="none"/>
+            <circle cx="17" cy="27" r="2.2" fill="#E63C1E" stroke="none"/>
+            <circle cx="7"  cy="17" r="2.2" fill="#E63C1E" stroke="none"/>
+            <circle cx="27" cy="17" r="2.2" fill="#E63C1E" stroke="none"/>
+          </svg>
+        </div>
+        <div class="svc-name">Montaža guma</div>
+        <p class="svc-desc">Skidanje i postavljanje guma na felne. Sve dimenzije, putnički i kombi program.</p>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="#E63C1E" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="17" cy="17" r="13"/>
+            <!-- Balansiranje teg -->
+            <rect x="10" y="6" width="6" height="4" rx="1" fill="#E63C1E" stroke="none"/>
+            <line x1="17" y1="17" x2="13" y2="8"/>
+            <line x1="17" y1="17" x2="24" y2="12"/>
+            <circle cx="17" cy="17" r="3" fill="none"/>
+          </svg>
+        </div>
+        <div class="svc-name">Balansiranje</div>
+        <p class="svc-desc">Pravilno balansirani točkovi, vozilo ne vibrira i gume se ravnomerno troše.</p>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="#E63C1E" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="17" cy="17" r="13"/>
+            <!-- Zakrpa -->
+            <ellipse cx="17" cy="17" rx="5" ry="5" fill="none"/>
+            <line x1="14" y1="14" x2="20" y2="20"/>
+            <line x1="20" y1="14" x2="14" y2="20"/>
+            <circle cx="17" cy="17" r="2" fill="#E63C1E" stroke="none"/>
+          </svg>
+        </div>
+        <div class="svc-name">Krpljenje gume</div>
+        <p class="svc-desc">Proveravamo da li se guma može zakrpiti. Ako može, radi se na licu mesta.</p>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="#E63C1E" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="17" cy="17" r="13"/>
+            <circle cx="17" cy="17" r="5"/>
+            <!-- Ispravljanje felne -->
+            <path d="M 17 4 Q 24 8 24 17"/>
+            <path d="M 10 4 Q 4 10 4 17"/>
+          </svg>
+        </div>
+        <div class="svc-name">Ispravljanje felni</div>
+        <p class="svc-desc">Udarna jama, ivičnjak, kvar. Ispravljamo deformisane alu i čelične felne.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SEZONSKA ZAMENA -->
+<section class="seasonal-section">
+  <div class="seasonal-inner">
+    <div class="seasonal-text">
+      <p class="seasonal-eyebrow">Sezonska zamena</p>
+      <h2 class="seasonal-title">Zimske na letnje,<br>letnje na zimske.<br>Na vreme, bez gužve.</h2>
+      <p class="seasonal-desc">
+        Zakažite zamenu pre sezone i dođite kad vam odgovara. Sezonska gužva u aprilu
+        zaobilazi one koji zakaže na vreme.
+      </p>
+      <a href="tel:+381113532211" class="btn-secondary">Zakažite termin</a>
+    </div>
+    <div class="seasonal-visual">
+      <div class="season-boxes">
+        <div class="season-box">
+          <div class="season-name">Zimske</div>
+          <div class="season-period">Nov – Mar</div>
+          <div class="season-rec">ispod 7°C</div>
+        </div>
+        <div class="season-box active">
+          <div class="season-name">Letnje</div>
+          <div class="season-period">Apr – Okt</div>
+          <div class="season-rec">zamena u toku</div>
+        </div>
+        <div class="season-box" style="grid-column: span 2; background: var(--black-soft);">
+          <div class="season-name" style="margin-bottom: 10px;">Hotel za gume</div>
+          <div class="season-rec" style="font-size: 13px; color: var(--muted);">
+            Čuvamo vam vansezonske gume. Nema ih u podrumu, nema po balkonu.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing-section">
+  <div class="closing-inner">
+    <p class="closing-label">Vulkanizer Čukarica · Pešačka 3</p>
+    <h2 class="closing-title">Pozovite.<br>Dolazite.</h2>
+    <p class="closing-sub">Ne čekajte sa probušenom gumom. Dođite odmah, pogledaćemo šta se može uraditi.</p>
+    <p class="closing-address">Pešačka 3 · Čukarica, Beograd</p>
+    <a href="tel:+381113532211" class="btn-white">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.03 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+      </svg>
+      011 353 2211
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Vulkanizer <span>Čukarica</span></div>
+  <div class="footer-info">
+    PEŠAČKA 3 · ČUKARICA, BEOGRAD<br>
+    011 353 2211
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Početno stanje
+gsap.set([".hero-eyebrow", ".hero-title", ".hero-sub", ".phone-block", ".hero-address"], {
+  opacity: 0, y: 24
+});
+gsap.set(".bg-tire", { opacity: 0, scale: 0.9 });
+gsap.set(".scroll-ind", { opacity: 0 });
+
+// Hero entrance
+const tl = gsap.timeline({ delay: 0.1 });
+tl
+  .to(".bg-tire",      { opacity: 0.04, scale: 1, duration: 1.4, ease: "power2.out" })
+  .to(".hero-eyebrow", { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, "-=1.0")
+  .to(".hero-title",   { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, "-=0.3")
+  .to(".hero-sub",     { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.5")
+  .to(".phone-block",  { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.4")
+  .to(".hero-address", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+  .to(".scroll-ind",   { opacity: 1, duration: 0.4 }, "-=0.2");
+
+// Usluge kartice
+gsap.set(".svc-card", {
+  opacity: 0, y: 36, rotateX: 12,
+  transformPerspective: 900, transformOrigin: "top center"
+});
+gsap.to(".svc-card", {
+  scrollTrigger: { trigger: ".services-grid", start: "top 72%", toggleActions: "play none none reverse" },
+  opacity: 1, y: 0, rotateX: 0,
+  duration: 0.6, stagger: 0.1,
+  ease: "power2.out"
+});
+
+// Strip headline
+gsap.from(".strip-headline, .strip-eyebrow", {
+  scrollTrigger: { trigger: ".services-strip", start: "top 75%" },
+  opacity: 0, y: 20, duration: 0.6, stagger: 0.1, ease: "power2.out"
+});
+
+// Sezonska sekcija
+gsap.from(".seasonal-text", {
+  scrollTrigger: { trigger: ".seasonal-section", start: "top 72%" },
+  opacity: 0, x: -30, duration: 0.8, ease: "power2.out"
+});
+gsap.from(".season-box", {
+  scrollTrigger: { trigger: ".seasonal-section", start: "top 72%" },
+  opacity: 0, y: 20, duration: 0.6, stagger: 0.1, delay: 0.2, ease: "power2.out"
+});
+
+// Closing
+gsap.from(".closing-inner", {
+  scrollTrigger: { trigger: ".closing-section", start: "top 72%" },
+  opacity: 0, y: 32, duration: 0.9, ease: "power3.out"
+});
+
+// Lagana rotacija gume u pozadini
+gsap.to(".bg-tire", {
+  rotation: 360,
+  duration: 60,
+  ease: "none",
+  repeat: -1,
+  transformOrigin: "center center"
+});
+</script>
+</body>
+</html>
